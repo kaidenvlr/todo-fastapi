@@ -7,10 +7,10 @@ class BadRequestException(HTTPException):
 
 
 class UnauthorizedException(HTTPException):
-    def __init__(self):
+    def __init__(self, msg: str = ""):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
+            detail=msg if msg else "Unauthorized",
             headers={"WWW-Authenticate": "Bearer"}
         )
 
