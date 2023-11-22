@@ -45,11 +45,11 @@ async def get_current_user(db: Annotated[AsyncSession, Depends(get_db)], token: 
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            raise UnauthorizedException()
+            raise UnauthorizedException(msg="Could not validate credentials")
         token_data = TokenDataSchema(username=username)
     except JWTError:
-        raise UnauthorizedException()
+        raise UnauthorizedException(msg="Could not validate credentials")
     user = await User.get_by_email(token_data.username, db)
     if user is None:
-        raise UnauthorizedException()
+        raise UnauthorizedException(msg="Could not validate credentials")
     return user
