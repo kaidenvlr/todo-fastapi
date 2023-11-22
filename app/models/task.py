@@ -12,3 +12,5 @@ class Task(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("app.users.id"), nullable=False)
     title: Mapped[str] = mapped_column(String, nullable=False)
     is_done: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    user = relationship("User", back_populates="tasks", lazy="selectin")

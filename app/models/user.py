@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, String
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from app.core.exceptions import NotFoundException
 from app.models.base import Base
@@ -14,6 +14,8 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
+
+    tasks = relationship("Task", back_populates="user")
 
     @classmethod
     async def get(cls, user_id: int, db_session: AsyncSession):
