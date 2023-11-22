@@ -1,13 +1,26 @@
-from sqlalchemy import Integer, String
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy import Integer, String, Boolean, ForeignKey
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
+from app.core.exceptions import NotFoundException
 from app.models.base import Base
 
 
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = ({"schema": "app"}, )
+    __table_args__ = ({"schema": "app"},)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
+
+    @classmethod
+    async def get(cls, user_id: int, db_session: AsyncSession):
+        stmt = select(cls).where(cls.id == user_id)
+        result = await db_session.execute(stmt)
+        instance = result.scalars().first()
+        if instance is None:
+            raise NotFoundException(msg="There is no user with this ID")
+        else:
+            return instance
