@@ -20,7 +20,7 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-async def authenticate(db: AsyncSession, username, password):
+async def authenticate(db: AsyncSession, username, password) -> User | bool:
     user = await User.get_by_email(username, db)
     if not user:
         return False
