@@ -34,3 +34,10 @@ class User(Base):
             raise NotFoundException(msg="There is no user with this Email")
         else:
             return instance
+
+    @classmethod
+    async def list(cls, db_session: AsyncSession):
+        stmt = select(cls)
+        result = await db_session.execute(stmt)
+        queryset = result.scalars().all()
+        return queryset
