@@ -26,3 +26,10 @@ class Task(Base):
             raise NotFoundException(msg="There is no task with this ID")
         else:
             return instance
+
+    @classmethod
+    async def get_user_tasks(cls, user_id: int, db_session: AsyncSession):
+        stmt = select(cls).where(cls.user_id == user_id)
+        result = await db_session.execute(stmt)
+        queryset = result.scalars().all()
+        return queryset
