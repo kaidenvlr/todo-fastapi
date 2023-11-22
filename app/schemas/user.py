@@ -6,8 +6,9 @@ class UserSchema(BaseModel):
     password: str = Field(title="", description="")
 
 
-class LoginResponse(BaseModel):
+class TokenResponse(BaseModel):
     access_token: str = Field(title="", description="")
+    token_type: str = Field(title="", description="")
 
 
 class TokenDataSchema(BaseModel):
