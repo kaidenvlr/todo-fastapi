@@ -1,8 +1,11 @@
 import os
 
 from dotenv import load_dotenv
+from fastapi.security import OAuth2PasswordBearer
 from pydantic import PostgresDsn, RedisDsn
 from pydantic_settings import BaseSettings
+
+from passlib.context import CryptContext
 
 load_dotenv()
 
@@ -19,3 +22,5 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
