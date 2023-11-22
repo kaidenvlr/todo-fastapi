@@ -24,3 +24,13 @@ class User(Base):
             raise NotFoundException(msg="There is no user with this ID")
         else:
             return instance
+
+    @classmethod
+    async def get_by_email(cls, email: str, db_session: AsyncSession):
+        stmt = select(cls).where(cls.email == email)
+        result = await db_session.execute(stmt)
+        instance = result.scalars().first()
+        if instance is None:
+            raise NotFoundException(msg="There is no user with this Email")
+        else:
+            return instance
