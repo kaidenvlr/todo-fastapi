@@ -6,6 +6,15 @@ class BadRequestException(HTTPException):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg if msg else "Bad request")
 
 
+class UnauthorizedException(HTTPException):
+    def __init__(self):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+
 class NotFoundException(HTTPException):
     def __init__(self, msg: str = ""):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=msg if msg else "Not found")
